@@ -21,7 +21,7 @@ tmux_conf_preserve_stock_bindings=false
 #   - true
 #   - false (default)
 #   - disabled (do not modify new-session bindings)
-tmux_conf_new_session_prompt=false
+tmux_conf_new_session_prompt=true
 
 # new session retains current path, possible values are:
 #   - true
@@ -442,18 +442,9 @@ tmux_conf_uninstall_plugins_on_reload=true
 # visit https://github.com/tmux-plugins for available plugins
 #set -g @plugin 'tmux-plugins/tmux-copycat'
 #set -g @plugin 'tmux-plugins/tmux-cpu'
-# https://github.com/catppuccin/tmux/issues/129
-# Due to the plugin name conflict, we have to fork and rename
-# the plugin name to 'tmux-catppuccin' in order to avoid the conflict.
-set -g @plugin 'CHBrianLiu/tmux-catppuccin'
-set -g @catppuccin_flavor 'latte'
-set -g @catppuccin_window_status_style 'rounded'
-set -g @catppuccin_window_default_text " #W"
-set -g @catppuccin_window_current_text " #W"
-set -g @catppuccin_window_text " #W"
-#set -g @plugin 'tmux-plugins/tmux-resurrect'
-#set -g @plugin 'tmux-plugins/tmux-continuum'
-#set -g @continuum-restore 'on'
+
+# which key
+set -g @plugin 'alexwforsythe/tmux-which-key'
 
 # This plugin helps navigate vim and tmux splits in the same key bindings
 set -g @plugin 'christoomey/vim-tmux-navigator'
@@ -462,6 +453,20 @@ set -g @vim_navigator_mapping_right "C-Right C-l"
 set -g @vim_navigator_mapping_up "C-k"
 set -g @vim_navigator_mapping_down "C-j"
 set -g @vim_navigator_mapping_prev ""  # removes the C-\ binding
+
+# This plugin integrate fzf fuzzy finder.
+set -g @plugin 'sainnhe/tmux-fzf'
+# Potentially change the keymap if i rely on it heavily
+# TMUX_FZF_LAUNCH_KEY="C-f"
+bind-key "s" run-shell -b "~/.config/tmux/plugins/tmux-fzf/scripts/session.sh switch"
+
+# This plugin preserves the sessions so they can be restored after restart.
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+# Also restores neovim
+set -g @resurrect-strategy-nvim 'session'
+# automatically save the session
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @continuum-restore 'on'
 
 # -- custom variables ----------------------------------------------------------
 
