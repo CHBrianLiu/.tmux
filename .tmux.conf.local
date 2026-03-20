@@ -404,6 +404,19 @@ set -g status-position top
 # shorten the time tmux waits for a command after the prefix
 set -g timeout-cmd 400
 
+# automatically name new sessions after the current directory
+# if a session with the same name exists, it appends a number suffix
+set-hook -g after-new-session 'run-shell " \
+  name=$(basename \"#{session_path}\"); \
+  if tmux has-session -t \"$name\" 2>/dev/null; then \
+    i=1; while tmux has-session -t \"${name}-${i}\" 2>/dev/null; do i=\$((i+1)); done; \
+    tmux rename-session -t \"#{session_id}\" \"${name}-\${i}\"; \
+    tmux display-message -d 3000 \"collision: session renamed to ${name}-\${i}\"; \
+  else \
+    tmux rename-session -t \"#{session_id}\" \"$name\"; \
+  fi \
+"'
+
 
 # -- tpm -----------------------------------------------------------------------
 
